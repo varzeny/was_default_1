@@ -1,0 +1,12 @@
+{
+    "ip":"192.168.0.12",
+    "port":"9000",
+    "db":{
+        "db_url":"mysql+asyncmy://game1_user:user@127.0.0.1/game1"
+    },
+    "security":{
+        "secret_key":"abcde",
+        "algorithm":"HS256",
+        "token_expire":60
+    }
+}

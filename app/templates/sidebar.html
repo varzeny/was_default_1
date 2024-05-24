@@ -1,0 +1,148 @@
+<!-- sidebar.html -->
+
+<!-- <link rel="stylesheet" type="text/css" href="static/sidebar.css"> -->
+
+<style>
+    #div_account{
+        margin: 1vh;
+        background-color: #aaaaff;
+        height: 120px;
+        display: flex;
+    }
+
+    #div_navigation{
+        margin: 1vh;
+        background-color: #aaaaff;
+    }
+
+    .btn_log{
+        margin-top: auto;
+    }
+
+</style>
+
+<div id="div_sidebar">
+    <div id="div_account">
+        {% if login %}
+            <label>id : {{login["sub"]}}</label>
+            <button class="btn_log" onclick="logout()">Logout</button>
+        {% else %}
+            <form id="form_login" onsubmit="login(event)">
+                <label for="input_id">id</label><input type="text" id="input_id" name="id" required><br>
+                <label for="input_pw">pw</label><input type="password" id="input_pw" name="pw" required><br>
+                <button class="btn_log" type="submit">Login!!</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div id="div_navigation">
+        <nav>
+            <ul>
+                <li><a href="#" onclick="get_html('home')">HOME</a></li>
+                <li><a href="#" onclick="get_html('dashboard')">DASHBOARD</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+
+<script>
+    
+
+
+    async function get_html( target ){
+        try{
+            const resp = await fetch(
+                `/get_html?target=${encodeURIComponent(target)}`,
+                {
+                    method:"GET"
+                }
+            )
+
+            if(resp.ok){
+                const data = await resp.text();
+                console.log( "html 로드 중" );
+                DIV_MAIN.innerHTML = data;
+            }else{
+                const data = await resp.json();
+                console.log( data.msg );
+                alert( data.msg );
+            }
+        }catch(e){
+            console.log( "ERROR : ",e );
+        }
+    }
+
+
+    async function login(event){
+        console.log("로그인 함수 발동 !")
+        event.preventDefault();
+
+        const id_ = document.getElementById("input_id").value;
+        const pw_ = document.getElementById("input_pw").value;
+
+        try{
+            const response = await fetch("/login",{
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    id:id_,
+                    pw:pw_
+                })
+            });
+            
+            if( response.ok ){    //HTTP status 200-299
+                const data = await response.json();
+                console.log( data.msg );
+                alert( data.msg );
+                window.location.reload();
+
+            }else if (response.status == 404){
+                console.log( "id not found !" );
+                alert( "id not found !" );
+
+            }else if(response.status == 401){
+                console.log( "wrong password !" );
+                alert( "wrong password !" )
+
+            }else{
+                console.log( "Unknown Error !" )
+                alert( "Unknown Error !" )
+            }
+
+        }catch(error){
+            console.error("ERROR ! : ",error);
+            alert("ERROR ! : ",error);
+        }
+    };
+
+
+    async function logout(){
+        console.log("로그아웃 버튼이 눌림!")
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData.msg);
+                alert(`Error: ${errorData.msg}`);
+                return;
+            }
+
+            alert('Logout successful');
+            // 페이지 새로고침
+            window.location.reload();
+
+        } catch (error) {
+            console.error('Network Error:', error);
+            alert('Network error occurred');
+        }
+    };
+
+</script>

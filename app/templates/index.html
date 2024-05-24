@@ -1,0 +1,61 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Index</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- <link rel='stylesheet' type='text/css' href='static/index.css'> -->
+    <style>
+        html{
+
+        }
+
+        body{
+
+            
+        }
+
+        #div_total{
+            display: flex;
+            width: 100%;
+            height: 100%;
+            background-color: blueviolet;
+        }
+
+        #div_side{
+            flex: 1;
+
+            /* background-color: #aaaaaa; */
+        }
+
+        #div_main{
+            flex: 9;
+
+
+            /* background-color: #bbbbbb; */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>index</h1>
+    <div id="div_total">
+        <div id="div_side">
+            {% include "sidebar.html" %}
+        </div>
+    
+        <div id="div_main">
+            {% include "home.html" %}
+        </div>
+    </div>
+
+
+    <script>
+        DIV_MAIN = document.getElementById("div_main");
+        USER;
+    </script>
+</body>
+</html>
